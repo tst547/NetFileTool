@@ -17,6 +17,7 @@ import cn.hy.netfiletool.box.ConstStrings;
 import cn.hy.netfiletool.box.Key;
 import cn.hy.netfiletool.common.FileUtil;
 import cn.hy.netfiletool.common.MyGson;
+import cn.hy.netfiletool.net.HostInfo;
 import cn.hy.netfiletool.net.IOStream;
 import cn.hy.netfiletool.net.download.DownLoadMsg;
 import cn.hy.netfiletool.net.download.Progress;
@@ -137,8 +138,8 @@ public class FileListActivity extends BaseActivity{
             FileMsg file = files.get(position);
             LayoutInflater inflater = FileListActivity.this.getLayoutInflater();
             View view = inflater.inflate(R.layout.file_item, null);
-            TextView text = (TextView) view.findViewById(R.id.item_text);
-            ImageView image = (ImageView) view.findViewById(R.id.icon);
+            TextView text = view.findViewById(R.id.item_text);
+            ImageView image = view.findViewById(R.id.icon);
             text.setText(file.name);
             if (file.isDir)
                 image.setImageResource(R.drawable.icons_folder);

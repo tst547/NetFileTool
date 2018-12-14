@@ -1,7 +1,6 @@
 package cn.hy.netfiletool.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,16 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import cn.hy.netfiletool.R;
 import cn.hy.netfiletool.activity.FileListActivity;
 import cn.hy.netfiletool.box.App;
 import cn.hy.netfiletool.box.ConstStrings;
 import cn.hy.netfiletool.box.Key;
-import cn.hy.netfiletool.common.FileUtil;
 import cn.hy.netfiletool.common.MyGson;
 import cn.hy.netfiletool.common.RefreshableView;
 import cn.hy.netfiletool.common.WifiUtil;
@@ -29,8 +24,6 @@ import cn.hy.netfiletool.pojo.FileMsg;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -86,8 +79,28 @@ public class HostListFragment extends Fragment {
         CustomAdapter customAdapter = new CustomAdapter(fileList);
         hlv.setAdapter(customAdapter);
         hlv.setOnItemClickListener((adapterView, view, pos, n) -> {
-            HostInfo file = (HostInfo) hlv.getItemAtPosition(pos);
-
+            //单击主机后以打开浏览该主机硬盘内的文件
+            HostInfo host = (HostInfo) hlv.getItemAtPosition(pos);
+            Intent intent = new Intent(getActivity(), FileListActivity.class);
+            App.getSession().setHostInfo(host).getFileList(null
+                    , ((call, response) -> {
+                        String res ;
+                        try {
+                            res = response.body().string();
+                            if (null != response) {
+                                BaseMsg<List<FileMsg>> baseMsg = (BaseMsg<List<FileMsg>>) MyGson.getObject(res
+                                        , App.fileListType);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(Key.FileListKey, (Serializable) baseMsg.msg);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), ConstStrings.FailedFileList, Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }));
         });
     }
 

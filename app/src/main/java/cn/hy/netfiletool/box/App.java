@@ -81,7 +81,7 @@ public class App {
     }
 
     public static Session getSession() {
-        return Session.create(hostInfo);
+        return Session.create();
     }
 
     public static String getFileMsg(FileMsg file) {

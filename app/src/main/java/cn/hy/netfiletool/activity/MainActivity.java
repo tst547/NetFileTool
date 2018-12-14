@@ -7,14 +7,16 @@ import android.support.annotation.IdRes;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import cn.hy.netfiletool.R;
 import cn.hy.netfiletool.box.App;
 import cn.hy.netfiletool.fragment.DownLoadListFragment;
 import cn.hy.netfiletool.fragment.HostListFragment;
 import cn.hy.netfiletool.fragment.LocalFileListFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private HostListFragment hostListFragment;
 
@@ -83,5 +85,21 @@ public class MainActivity extends AppCompatActivity {
         App.readWifiInfo(wm);//根据WIFI读取网络信息
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_btn_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.action_cart://监听菜单按钮
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

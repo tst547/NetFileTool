@@ -20,8 +20,7 @@ public class Session {
 
     private static Session session;
 
-    private Session(String urlBase) {
-        this.urlBase = urlBase;
+    private Session() {
     }
 
     public String getUrlBase(){
@@ -31,12 +30,24 @@ public class Session {
     /**
      * @return
      */
-    public static Session create(HostInfo hostInfo) {
+    public static Session create() {
         if (null == session) {
-            session = new Session("http://" + WifiUtil.long2ip(hostInfo.getHostIp())+ ":" + hostInfo.getHostPort());
+            session = new Session();
         }
         return session;
     }
+
+    public Session setHostInfo(HostInfo hostInfo) {
+        StringBuffer stringBuffer = new StringBuffer();
+        this.urlBase = stringBuffer
+                .append("http://")
+                .append(WifiUtil.long2ip(hostInfo.getHostIp()))
+                .append(":")
+                .append(hostInfo.getHostPort())
+                .toString();
+        return this;
+    }
+
 
     /**
      * 文件列表
