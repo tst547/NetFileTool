@@ -10,22 +10,15 @@ import java.io.IOException;
 
 public class FileUtil {
 
+
 	/**
 	 * 创建文件夹
-	 * 
+	 *
 	 * @param filePath
 	 */
 	public static File createDirs(String filePath) {
 		File file = new File(App.path.getPath() + "/" + filePath);
 		if (!file.exists()) {
-			file.mkdirs();
-		} else {
-			int num = 1;
-			while (!file.exists()) {
-				file = new File(App.path.getPath() + "/" + "(" + num + ")"
-						+ file.getName());
-				num++;
-			}
 			file.mkdirs();
 		}
 		return file;
@@ -33,7 +26,7 @@ public class FileUtil {
 
 	/**
 	 * 创建文件
-	 * 
+	 *
 	 * @param filePath
 	 */
 	public static File createFile(String filePath) {
@@ -80,41 +73,43 @@ public class FileUtil {
 		return size;
 	}
 
-    /**
-     * 根据FileMsg对象创建
-     * 手机对应文件
-     *
-     * @param fi
-     * @return
-     * @throws IOException
-     */
-    public static File createFileByBaseFile(FileMsg fi,String pathName) throws IOException {
-        File path = new File(pathName);//App.SdCardPath + App.DownLoadPath
-        if (!path.exists()) {
-            path.mkdirs();
-        }
-        File fl = new File(path.getPath() + "/" + fi.name);
-        if (!fl.exists()) {
-            fl.createNewFile();
-        } else {
-            int num = 1;
-            while (fl.exists()) {
-                fl = new File(path.getPath() + "/" + "(" + num + ")"
-                        + fi.name);
-                num++;
-            }
-            fl.createNewFile();
-        }
-        return fl;
-    }
-
-	private static String [] videoFiles = {".avi",".mp4",".flv"};
+	private static String [] videoFiles = {
+			".avi",".mp4",".flv",".wmv",".mov",".rmvb",".rm",".mkv",".amv"
+	};
 
 	public static boolean isVideo(String fileName){
 		for (String video:videoFiles){
-			if (fileName.contains(video))
+			if (fileName.toLowerCase().contains(video))
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 根据Base.File对象创建
+	 * 手机对应文件
+	 *
+	 * @param fi
+	 * @return
+	 * @throws IOException
+	 */
+	public static File createFileByBaseFile(FileMsg fi,String pathName) throws IOException {
+		File path = new File(pathName);
+		if (!path.exists()) {
+			path.mkdirs();
+		}
+		File fl = new File(path.getPath() + "/" + fi.name);
+		if (!fl.exists()) {
+			fl.createNewFile();
+		} else {
+			int num = 1;
+			while (fl.exists()) {
+				fl = new File(path.getPath() + "/" + "(" + num + ")"
+						+ fi.name);
+				num++;
+			}
+			fl.createNewFile();
+		}
+		return fl;
 	}
 }

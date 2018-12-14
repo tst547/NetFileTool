@@ -1,11 +1,13 @@
 package cn.hy.netfiletool.common;
 
-import android.util.Log;
-
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import android.util.Log;
 
 public class WifiUtil {
 
@@ -20,12 +22,49 @@ public class WifiUtil {
 		sb.append(String.valueOf((int) (ip & 0xff)));
 		return sb.toString();
 	}
+	public static String androidLong2ip(long ip) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(String.valueOf((int) (ip & 0xff)));
+		sb.append('.');
+		sb.append(String.valueOf((int) ((ip >> 8) & 0xff)));
+		sb.append('.');
+		sb.append(String.valueOf((int) ((ip >> 16) & 0xff)));
+		sb.append('.');
+		sb.append(String.valueOf((int) ((ip >> 24) & 0xff)));
+		return sb.toString();
+	}
+
+	public static long ip2long(String ip) {
+		String[] ipArray = ip.split("\\.");
+		List ipNums = new ArrayList();
+		for (int i = 0; i < 4; ++i) {
+			ipNums.add(Long.valueOf(Long.parseLong(ipArray[i].trim())));
+		}
+		long ZhongIPNumTotal = ((Long) ipNums.get(0)).longValue() * 256L * 256L * 256L
+				+ ((Long) ipNums.get(1)).longValue() * 256L * 256L + ((Long) ipNums.get(2)).longValue() * 256L
+				+ ((Long) ipNums.get(3)).longValue();
+
+		return ZhongIPNumTotal;
+	}
+
+	public static long androidIp2long(String ip) {
+		String[] ipArray = ip.split("\\.");
+		List ipNums = new ArrayList();
+		for (int i = 0; i < 4; ++i) {
+			ipNums.add(Long.valueOf(Long.parseLong(ipArray[i].trim())));
+		}
+		long ZhongIPNumTotal = ((Long) ipNums.get(3)).longValue() * 256L * 256L * 256L
+				+ ((Long) ipNums.get(2)).longValue() * 256L * 256L + ((Long) ipNums.get(1)).longValue() * 256L
+				+ ((Long) ipNums.get(0)).longValue();
+
+		return ZhongIPNumTotal;
+	}
 
 	private final static int INADDRSZ = 4;
 
 	/**
 	 * 把IP地址转化为字节数组
-	 * 
+	 *
 	 * @param ipAddr
 	 * @return byte[]
 	 */
@@ -39,7 +78,7 @@ public class WifiUtil {
 
 	/**
 	 * 把IP地址转化为int
-	 * 
+	 *
 	 * @param ipAddr
 	 * @return int
 	 */
@@ -60,7 +99,7 @@ public class WifiUtil {
 
 	/**
 	 * 字节数组转化为IP
-	 * 
+	 *
 	 * @param bytes
 	 * @return int
 	 */
@@ -72,7 +111,7 @@ public class WifiUtil {
 
 	/**
 	 * 根据位运算把 byte[] -> int
-	 * 
+	 *
 	 * @param bytes
 	 * @return int
 	 */
@@ -86,7 +125,7 @@ public class WifiUtil {
 
 	/**
 	 * 把IP地址转化为int
-	 * 
+	 *
 	 * @param ipAddr
 	 * @return int
 	 */
@@ -100,7 +139,7 @@ public class WifiUtil {
 
 	/**
 	 * ipInt -> byte[]
-	 * 
+	 *
 	 * @param ipInt
 	 * @return byte[]
 	 */
@@ -115,7 +154,7 @@ public class WifiUtil {
 
 	/**
 	 * 把int->ip地址
-	 * 
+	 *
 	 * @param ipInt
 	 * @return String
 	 */
@@ -128,7 +167,7 @@ public class WifiUtil {
 
 	/**
 	 * 把192.168.1.1/24 转化为int数组范围
-	 * 
+	 *
 	 * @param ipAndMask
 	 * @return int[]
 	 */
@@ -153,7 +192,7 @@ public class WifiUtil {
 
 	/**
 	 * 把192.168.1.1/24 转化为IP数组范围
-	 * 
+	 *
 	 * @param ipAndMask
 	 * @return String[]
 	 */
@@ -164,7 +203,7 @@ public class WifiUtil {
 
 	/**
 	 * 根据IP 子网掩码（192.168.1.1 255.255.255.0）转化为IP段
-	 * 
+	 *
 	 * @param ipAddr
 	 *            ipAddr
 	 * @param mask
@@ -194,7 +233,7 @@ public class WifiUtil {
 
 	/**
 	 * 根据IP 子网掩码（192.168.1.1 255.255.255.0）转化为IP段
-	 * 
+	 *
 	 * @param ipAddr
 	 *            ipAddr
 	 * @param mask
@@ -208,7 +247,7 @@ public class WifiUtil {
 
 	/**
 	 * 将整数形式的ip地址转换为字符串形式
-	 * 
+	 *
 	 * @param ipInBigInt
 	 *            整数形式的ip地址
 	 * @return 字符串形式的ip地址
@@ -227,7 +266,7 @@ public class WifiUtil {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * 对比两个ip是否处于同一网段
 	 * @param gateWay
@@ -248,4 +287,5 @@ public class WifiUtil {
 		}
 		return true;
 	}
+
 }

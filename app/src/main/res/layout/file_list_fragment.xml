@@ -1,16 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="cn.hy.netfiletool.fragment.FileListFragment">
-    <cn.hy.netfiletool.common.RefreshableView
-            android:id="@+id/refreshable_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiperereshlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <ListView
                 android:id="@+id/hostFileView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"/>
-    </cn.hy.netfiletool.common.RefreshableView>
+        <TextView
+                android:id="@+id/empty_tv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="无数据"
+                android:textSize="30dp"
+                android:visibility="visible" />
 
-</FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

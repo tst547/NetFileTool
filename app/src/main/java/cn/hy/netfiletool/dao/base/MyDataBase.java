@@ -17,17 +17,16 @@ public class MyDataBase extends SQLiteOpenHelper {
 	private static SQLiteDatabase base;
 
 	// 建表语句
-	public static final String CREATE_TABLE_TASK = "create table task("
-			+ "id integer primary key, " + "fipath text,"
-			+ "progress integer, " + " max integer,"+" isdir integer)";
+	public static final String CREATE_TABLE_TASK = "create table host_info("
+			+ "host_ip varchar(30) primary key, " + "host_port varchar(30),"
+			+ "type varchar(30))";
 
 	public static final String CREATE_TABLE_FILES = "create table files("
 			+ "id bigint," + "name text," + "path text," + "isdir integer,"
 			+ "length integer," + "current integer)";
 
-	public MyDataBase(Context context, String name, CursorFactory factory,
-			int version) {
-		super(context, name, factory, version);
+	public MyDataBase(Context context, String name, int version) {
+		super(context, name, null, version);
 	}
 
 	/**

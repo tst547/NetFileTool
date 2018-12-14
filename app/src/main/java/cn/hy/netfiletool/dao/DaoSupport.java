@@ -1,22 +1,23 @@
 package cn.hy.netfiletool.dao;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import cn.hy.netfiletool.dao.base.MyDataBase;
 
-public class DaoSupport{
+public class DaoSupport extends MyDataBase {
 
 	protected SQLiteDatabase db;
-	
+
 	protected long error = -1;
-	
-	public DaoSupport(){
-		this(null);
+
+	public DaoSupport(Context context, String name, int version) {
+		super(context, name, version);
+		this.db = super.getWritableDatabase();
 	}
-	
-	protected DaoSupport(SQLiteDatabase db) {
-		this.db = db;
-	}
-	
+
+
 	protected boolean insert(String tableName,ContentValues values){
 		if(error==db.insert(tableName, null, values))
 			return false;
@@ -37,6 +38,17 @@ public class DaoSupport{
 		else
 			return true;
 	}
-	
-	
+
+	protected Cursor selectAll(String tableName, String[] columns){
+		return db.query(true
+				, tableName
+				, columns
+				,null
+				,null
+				,null
+				,null
+				,null
+				,null);
+	}
+
 }

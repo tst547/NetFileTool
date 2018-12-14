@@ -1,5 +1,6 @@
 package cn.hy.netfiletool.net;
 
+import cn.hy.netfiletool.box.App;
 import cn.hy.netfiletool.common.MyGson;
 import cn.hy.netfiletool.common.WifiUtil;
 import cn.hy.netfiletool.pojo.BaseMsg;
@@ -38,9 +39,10 @@ public class Scanner {
                             new TypeToken<BaseMsg<IpMsg>>() {
                             }.getType());
                     HostInfo hostInfo = new HostInfo();
-                    hostInfo.setHostIp(Long.valueOf(WifiUtil.ipToInt(recv.getAddress().getHostAddress())));
+                    hostInfo.setHostIp(Long.valueOf(WifiUtil.ip2long(recv.getAddress().getHostAddress())));
                     hostInfo.setHostPort(baseMsg.msg.port);
-                    netWorkInfo.getHostIp().add(hostInfo);
+                    if(!App.getHostMap().containsKey(recv.getAddress().getHostAddress()))
+                        App.addAddress(recv.getAddress().getHostAddress(),hostInfo);
                 }
             } catch (SocketException e) {
                 e.printStackTrace();
@@ -55,7 +57,7 @@ public class Scanner {
      * @return
      * @throws IOException
      */
-    public void conn() {
+    public boolean conn() {
         try {
             DatagramSocket socket = new DatagramSocket();
             socket.setSoTimeout(2500);
@@ -67,7 +69,9 @@ public class Scanner {
             socket.send(packet);
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     /**
@@ -76,22 +80,23 @@ public class Scanner {
      * @return
      * @throws Exception
      */
-    public void scan() {
+    public boolean scan() {
         try {
             DatagramSocket socket = new DatagramSocket();
             socket.setSoTimeout(2500);
             socket.setBroadcast(true);
             socket.setSoTimeout(100);
+
             //根据子网掩码 和 主机ip地址 计算出 网络号
-            int network = netWorkInfo.getNetmask() & netWorkInfo.getIp();
+            long network = netWorkInfo.getNetmask() & netWorkInfo.getIp();
             byte[] buf = new byte[1];
             buf[0] = 0x01;
             //子网掩码取反值后 二进制格式的长度n 则2^n是最大主机数(幂) -2则是可用数量
-            int total = (int) Math.pow(2,Integer.toBinaryString((~netWorkInfo.getNetmask())).length())-2;
+            int total = (int) Math.pow(2,Long.toBinaryString((~netWorkInfo.getNetmask())).length())-2;
 
             for (int i = 0; i < total; i++) {
                 //从网络号开始 有total数量的主机数
-                String host = WifiUtil.intToIp(network+i);
+                String host = WifiUtil.long2ip(network+i);
                 if (netWorkInfo.getBroadcastAddr()==network+i||network+i==netWorkInfo.getIp())
                     continue;//如果是广播地址 or 自身ip则跳过
                 InetAddress addr = InetAddress.getByName(host);
@@ -100,7 +105,9 @@ public class Scanner {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
 

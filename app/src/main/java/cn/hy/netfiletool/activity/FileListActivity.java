@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.*;
 import android.widget.*;
 import cn.hy.netfiletool.R;
@@ -17,7 +16,6 @@ import cn.hy.netfiletool.box.ConstStrings;
 import cn.hy.netfiletool.box.Key;
 import cn.hy.netfiletool.common.FileUtil;
 import cn.hy.netfiletool.common.MyGson;
-import cn.hy.netfiletool.net.HostInfo;
 import cn.hy.netfiletool.net.IOStream;
 import cn.hy.netfiletool.net.download.DownLoadMsg;
 import cn.hy.netfiletool.net.download.Progress;
@@ -29,6 +27,7 @@ public class FileListActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.file_layout);
         // 获取上一个Activity传过来的文件列表(String类型的JSON)
         List<FileMsg> fileList = (List<FileMsg>) getIntent().getExtras().get(Key.FileListKey);
         // 加载该文件列表
@@ -42,7 +41,7 @@ public class FileListActivity extends BaseActivity{
      * @param fileList
      */
     protected void initList(List<FileMsg> fileList) {
-        ListView hlv = findViewById(R.id.hostFileView);
+        ListView hlv = findViewById(R.id.FileListView);
         CustomAdapter customAdapter = new CustomAdapter(fileList);
         hlv.setAdapter(customAdapter);
         hlv.setOnItemClickListener((adapterView, view, pos, n) -> {

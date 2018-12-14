@@ -4,6 +4,9 @@ import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
 import cn.hy.netfiletool.common.MyMath;
+import cn.hy.netfiletool.common.WifiUtil;
+import cn.hy.netfiletool.dao.DaoSupport;
+import cn.hy.netfiletool.dao.HostDao;
 import cn.hy.netfiletool.net.HostInfo;
 import cn.hy.netfiletool.net.Scanner;
 import cn.hy.netfiletool.net.Session;
@@ -28,7 +31,9 @@ import java.util.Map;
  */
 public class App {
 
-    public static Map<String,HostInfo> hostMap = new LinkedHashMap<>();
+    public static boolean isHostListStarted;
+
+    public static HostDao hostDao;
 
     public static List<DownLoadMsg> downloadMsgs = new ArrayList<>();//下载信息列表
 
@@ -42,12 +47,11 @@ public class App {
 
     private static int ServerScannerPort = 22555; //扫描消息接收端口(广播)
 
+    private static Map<String,HostInfo> hostMap;
+
     public static String DownLoadPath = "JCdownload";// 文件到手机SD卡上的指定目录
 
-    private static NetWorkInfo netWorkInfo;//网路配置信息
-
-    private static HostInfo hostInfo;//当前连接主机
-
+    public static NetWorkInfo netWorkInfo;//网路配置信息
 
     private static Scanner scanner;
 
@@ -59,10 +63,17 @@ public class App {
         }
     }
 
-    public static NetWorkInfo getNetWorkInfo(){
-        return netWorkInfo;
+    public static Map<String,HostInfo> getHostMap(){
+        if (null==hostMap){
+            hostMap = hostDao.selectAll();
+        }
+        return hostMap;
     }
 
+    public static void addAddress(String key,HostInfo hostInfo){
+        getHostMap().put(key,hostInfo);
+        hostDao.add(hostInfo);
+    }
 
     /**
      * 用Android带有WifiManager 来获取 当前网络信息
@@ -71,10 +82,10 @@ public class App {
     public static void readWifiInfo(WifiManager wm) {
         // WifiInfo wifiInfo = wm.getConnectionInfo();
         DhcpInfo di = wm.getDhcpInfo();
-        netWorkInfo.setNetmask(di.netmask);
-        netWorkInfo.setIp(di.ipAddress);
+        netWorkInfo.setNetmask(di.netmask==0?4294967040l:di.netmask);
+        netWorkInfo.setIp(WifiUtil.ip2long(WifiUtil.androidLong2ip(di.ipAddress)));
         netWorkInfo.setBroadcastAddr(netWorkInfo.getNetmask(),netWorkInfo.getIp());
-        netWorkInfo.setGateWay(di.gateway);
+        netWorkInfo.setGateWay(WifiUtil.ip2long(WifiUtil.androidLong2ip(di.gateway)));
         netWorkInfo.setScanPort(App.ServerScannerPort);
         scanner = new Scanner(netWorkInfo);
         scanner.start();

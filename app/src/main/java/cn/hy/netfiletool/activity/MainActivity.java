@@ -2,11 +2,13 @@ package cn.hy.netfiletool.activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.*;
@@ -14,13 +16,17 @@ import android.widget.EditText;
 import cn.hy.netfiletool.R;
 import cn.hy.netfiletool.box.App;
 import cn.hy.netfiletool.box.ConstStrings;
+import cn.hy.netfiletool.box.Key;
 import cn.hy.netfiletool.common.WifiUtil;
+import cn.hy.netfiletool.dao.HostDao;
 import cn.hy.netfiletool.fragment.DownLoadListFragment;
 import cn.hy.netfiletool.fragment.HostListFragment;
 import cn.hy.netfiletool.fragment.LocalFileListFragment;
 import cn.hy.netfiletool.net.HostInfo;
 
 public class MainActivity extends BaseActivity {
+
+    private HostDao hostDao;
 
     private HostListFragment hostListFragment;
 
@@ -55,9 +61,10 @@ public class MainActivity extends BaseActivity {
      * @param targetFragment
      */
     private void switchFragment(@IdRes int res,Fragment targetFragment) {
+        if (null!=currentFragment&&targetFragment.equals(currentFragment))
+            return;
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
-
         //该切换方式仅仅是隐藏和显示fragment 并没有销毁及新建
         //但需要保持参数的fragment是同一个对象（没有再次构造新对象）
         if (!targetFragment.isAdded()) {
@@ -69,13 +76,21 @@ public class MainActivity extends BaseActivity {
         }
         currentFragment = targetFragment;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //请求创建文件权限
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android
+                .Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
         setContentView(R.layout.activity_main);
         //初始化底部菜单栏
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        hostDao = new HostDao(this,Key.DataBase,1);
+        App.hostDao = hostDao;
     }
 
     @Override
@@ -87,6 +102,7 @@ public class MainActivity extends BaseActivity {
         WifiManager wm = (WifiManager) getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);//获取Android WIFI管理工具
         App.readWifiInfo(wm);//根据WIFI读取网络信息
+        switchFragment(R.id.content,hostListFragment);
     }
 
     @Override
@@ -113,7 +129,7 @@ public class MainActivity extends BaseActivity {
                 builder.setPositiveButton(ConstStrings.Confirm, (dialog, which) -> {
                     String address = ipAddress.getText().toString().trim();
                     String port = ipPort.getText().toString().trim();
-                    App.getNetWorkInfo().getHostIp().add(new HostInfo(WifiUtil.ipToInt(address),Integer.valueOf(port)));
+                    App.addAddress(address,new HostInfo(WifiUtil.ip2long(address),Integer.valueOf(port)));
                     dialog.cancel();
                 });
                 builder.setNegativeButton(ConstStrings.Cancel, (dialog, which) -> {
@@ -125,4 +141,16 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //创建文件夹
+                    break;
+                }
+        }
+    }
 }

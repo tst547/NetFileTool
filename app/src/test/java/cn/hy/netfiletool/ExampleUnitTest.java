@@ -1,5 +1,6 @@
 package cn.hy.netfiletool;
 
+import cn.hy.netfiletool.common.WifiUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,6 +13,6 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+        System.out.println(WifiUtil.long2ip(WifiUtil.ip2long("192.168.1.101")));
     }
 }
