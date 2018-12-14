@@ -31,4 +31,12 @@ public class HostInfo implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+
+    public HostInfo(long hostIp,int hostPort){
+        this.hostIp = hostIp;
+        this.hostPort = hostPort;
+    }
+
+    public HostInfo(){
+    }
 }

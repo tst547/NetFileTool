@@ -1,20 +1,24 @@
 package cn.hy.netfiletool.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.*;
+import android.widget.EditText;
 import cn.hy.netfiletool.R;
 import cn.hy.netfiletool.box.App;
+import cn.hy.netfiletool.box.ConstStrings;
+import cn.hy.netfiletool.common.WifiUtil;
 import cn.hy.netfiletool.fragment.DownLoadListFragment;
 import cn.hy.netfiletool.fragment.HostListFragment;
 import cn.hy.netfiletool.fragment.LocalFileListFragment;
+import cn.hy.netfiletool.net.HostInfo;
 
 public class MainActivity extends BaseActivity {
 
@@ -95,8 +99,27 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
-            case R.id.action_cart://监听菜单按钮
+            case R.id.app_add://监听菜单按钮
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("输入一个地址");
+                //    通过LayoutInflater来加载一个xml的布局文件作为一个View对象
+                View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog, null);
+                //    设置我们自己定义的布局文件作为弹出框的Content
+                builder.setView(view);
 
+                final EditText ipAddress = view.findViewById(R.id.ip_address);
+                final EditText ipPort = view.findViewById(R.id.ip_port);
+
+                builder.setPositiveButton(ConstStrings.Confirm, (dialog, which) -> {
+                    String address = ipAddress.getText().toString().trim();
+                    String port = ipPort.getText().toString().trim();
+                    App.getNetWorkInfo().getHostIp().add(new HostInfo(WifiUtil.ipToInt(address),Integer.valueOf(port)));
+                    dialog.cancel();
+                });
+                builder.setNegativeButton(ConstStrings.Cancel, (dialog, which) -> {
+                    dialog.cancel();
+                });
+                builder.show();
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -25,6 +25,7 @@ public class ConstStrings {
     public static final String Detail = "文件属性";//下载
     public static final String Options = "选项";//下载
     public static final String Confirm = "确定";//确认
+    public static final String Cancel = "取消";//取消
 
     public static final String Folder = "文件夹";//文件夹
     public static final String File = "文件";//文件
