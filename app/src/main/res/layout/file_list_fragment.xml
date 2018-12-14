@@ -1,0 +1,16 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="cn.hy.netfiletool.fragment.FileListFragment">
+    <cn.hy.netfiletool.common.RefreshableView
+            android:id="@+id/refreshable_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <ListView
+                android:id="@+id/hostFileView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+    </cn.hy.netfiletool.common.RefreshableView>
+
+</FrameLayout>
