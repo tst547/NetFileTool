@@ -11,6 +11,8 @@ public class ConstStrings {
     public static final String FileUnitsKb = "KB";
     public static final String FileUnitsByte = "byte";
 
+    public static final String Back = "..";//顿号
+
     public static final String DivideFormat = "0.00";//除法结果标准
     public static final String FileName = "文件名";//文件
     public static final String FileSize = "文件大小";//文件

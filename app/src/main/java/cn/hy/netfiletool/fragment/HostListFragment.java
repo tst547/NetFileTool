@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HostListFragment extends Fragment {
+public class HostListFragment extends ListFragment {
+
+    private CustomAdapter customAdapter;
 
     private View rootView;
 
@@ -62,40 +65,41 @@ public class HostListFragment extends Fragment {
         initList(App.getHostMap());
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        HostInfo host = (HostInfo) customAdapter.getItem(position);
+        Intent intent = new Intent(getActivity(), FileListActivity.class);
+        App.getSession().setHostInfo(host).getFileList(null
+                , ((call, response) -> {
+                    String res ;
+                    try {
+                        res = response.body().string();
+                        if (null != response) {
+                            BaseMsg<List<FileMsg>> baseMsg = (BaseMsg<List<FileMsg>>) MyGson.getObject(res
+                                    , App.fileListType);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(Key.FileListKey, (Serializable) baseMsg.msg);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), ConstStrings.FailedFileList, Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }));
+    }
+
     /**
      * 初始化列表
      *
      * @param fileMap
      */
     protected void initList(Map<String, HostInfo> fileMap) {
-        ListView hlv = getActivity().findViewById(R.id.hostFileView);
-        hlv.setEmptyView(getActivity().findViewById(R.id.empty_tv));
-        CustomAdapter customAdapter = new CustomAdapter(fileMap);
-        hlv.setAdapter(customAdapter);
-        hlv.setOnItemClickListener((adapterView, view, pos, n) -> {
-            //单击主机后以打开浏览该主机硬盘内的文件
-            HostInfo host = (HostInfo) hlv.getItemAtPosition(pos);
-            Intent intent = new Intent(getActivity(), FileListActivity.class);
-            App.getSession().setHostInfo(host).getFileList(null
-                    , ((call, response) -> {
-                        String res ;
-                        try {
-                            res = response.body().string();
-                            if (null != response) {
-                                BaseMsg<List<FileMsg>> baseMsg = (BaseMsg<List<FileMsg>>) MyGson.getObject(res
-                                        , App.fileListType);
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable(Key.FileListKey, (Serializable) baseMsg.msg);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getContext(), ConstStrings.FailedFileList, Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    }));
-        });
+        //hlv.setEmptyView(getActivity().findViewById(R.id.empty_tv));
+        customAdapter = new CustomAdapter(fileMap);
+        setListAdapter(customAdapter);
     }
 
     @Override
@@ -137,7 +141,7 @@ public class HostListFragment extends Fragment {
             TextView text = view.findViewById(R.id.item_text);
             ImageView image = view.findViewById(R.id.icon);
             text.setText(WifiUtil.long2ip(host.getHostIp()));
-            image.setImageResource(R.drawable.ic_computer_black_24dp);
+            image.setImageResource(R.drawable.computer);
             return view;
         }
     }

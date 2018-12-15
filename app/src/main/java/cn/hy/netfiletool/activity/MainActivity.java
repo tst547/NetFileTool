@@ -65,6 +65,7 @@ public class MainActivity extends BaseActivity {
             return;
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         //该切换方式仅仅是隐藏和显示fragment 并没有销毁及新建
         //但需要保持参数的fragment是同一个对象（没有再次构造新对象）
         if (!targetFragment.isAdded()) {

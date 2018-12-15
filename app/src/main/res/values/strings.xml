@@ -6,7 +6,7 @@
     <string name="hello_blank_fragment3">test 3</string>
     <string name="app_picdes">image</string>
     <string name="title_cloud">主机</string>
-    <string name="title_upload">发送</string>
+    <string name="title_local">本地</string>
 
     <!-- 下拉刷新用 -->
     <string name="pull_to_refresh">下拉可以刷新</string>
@@ -19,4 +19,5 @@
     <string name="item_add">手动添加</string>
     <string name="ip_address">IP地址</string>
     <string name="ip_port">端口号</string>
+
 </resources>
