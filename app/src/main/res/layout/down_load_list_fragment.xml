@@ -2,13 +2,12 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="cn.hy.netfiletool.fragment.DownLoadListFragment">
+             tools:context="cn.hy.netfiletool.fragment.listfragment.DownLoadListFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-            android:id="@+id/textOne"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment2" />
+    <ListView
+            android:id="@+id/android:list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
 
 </FrameLayout>

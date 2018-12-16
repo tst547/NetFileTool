@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.*;
@@ -13,27 +15,29 @@ import android.support.v4.view.ViewPager;
 import android.view.*;
 import android.widget.EditText;
 import cn.hy.netfiletool.R;
-import cn.hy.netfiletool.box.App;
-import cn.hy.netfiletool.box.ConstStrings;
-import cn.hy.netfiletool.box.Key;
+import cn.hy.netfiletool.application.collection.HostData;
+import cn.hy.netfiletool.key.ConstStrings;
+import cn.hy.netfiletool.key.Key;
 import cn.hy.netfiletool.common.MyGson;
 import cn.hy.netfiletool.common.WifiUtil;
-import cn.hy.netfiletool.dao.HostDao;
-import cn.hy.netfiletool.fragment.DownLoadListFragment;
-import cn.hy.netfiletool.fragment.HostListFragment;
-import cn.hy.netfiletool.fragment.LocalFileListFragment;
-import cn.hy.netfiletool.net.HostInfo;
-import cn.hy.netfiletool.pojo.BaseMsg;
-import cn.hy.netfiletool.pojo.FileMsg;
+import cn.hy.netfiletool.database.dao.HostDao;
+import cn.hy.netfiletool.fragment.listfragment.DownLoadListFragment;
+import cn.hy.netfiletool.fragment.listfragment.HostListFragment;
+import cn.hy.netfiletool.fragment.listfragment.LocalFileListFragment;
+import cn.hy.netfiletool.bean.HostInfo;
+import cn.hy.netfiletool.net.NetWorkInfo;
+import cn.hy.netfiletool.net.Scanner;
+import cn.hy.netfiletool.net.pojo.BaseMsg;
+import cn.hy.netfiletool.net.pojo.FileMsg;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
-
-    private HostDao hostDao;
 
     private ViewPager viewPager;
 
@@ -88,8 +92,24 @@ public class MainActivity extends BaseActivity {
         });
         setupViewPager(viewPager);
 
-        hostDao = new HostDao(this,Key.DataBase,1);
-        App.hostDao = hostDao;
+        WifiManager wm = (WifiManager) getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);//获取Android WIFI管理工具
+        DhcpInfo di = wm.getDhcpInfo();
+        //如果获取子网掩码失败 设置默认子网掩码为255.255.255.0
+        NetWorkInfo netWorkInfo = new NetWorkInfo();
+        netWorkInfo.setNetmask(di.netmask==0?4294967040l:di.netmask);
+        netWorkInfo.setIp(WifiUtil.ip2long(WifiUtil.androidLong2ip(di.ipAddress)));
+        netWorkInfo.setBroadcastAddr(netWorkInfo.getNetmask(),netWorkInfo.getIp());
+        netWorkInfo.setGateWay(WifiUtil.ip2long(WifiUtil.androidLong2ip(di.gateway)));
+        netWorkInfo.setScanPort(Key.ServerScannerPort);
+        HostData hostData = new HostData(
+                new HostDao(this,Key.DataBase,1));
+        Scanner scanner = new Scanner();
+        scanner.startListener(hostData,Key.ScannerRecvPort);
+        appBox.setHostData(hostData);
+        appBox.setScanner(scanner);
+        appBox.setNetWorkInfo(netWorkInfo);
+        scanner.conn(netWorkInfo);
     }
 
     /**
@@ -102,14 +122,6 @@ public class MainActivity extends BaseActivity {
         adapter.addFragment(new LocalFileListFragment());
         adapter.addFragment(new DownLoadListFragment());
         viewPager.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        WifiManager wm = (WifiManager) getApplicationContext()
-                .getSystemService(Context.WIFI_SERVICE);//获取Android WIFI管理工具
-        App.readWifiInfo(wm);//根据WIFI读取网络信息
     }
 
     /**
@@ -146,7 +158,9 @@ public class MainActivity extends BaseActivity {
                 builder.setPositiveButton(ConstStrings.Confirm, (dialog, which) -> {
                     String address = ipAddress.getText().toString().trim();
                     String port = ipPort.getText().toString().trim();
-                    App.addAddress(address,new HostInfo(WifiUtil.ip2long(address),Integer.valueOf(port)));
+                    appBox.getHostData().putHost(address
+                            .concat(ConstStrings.Colon)
+                            .concat(port),new HostInfo(WifiUtil.ip2long(address),Integer.valueOf(port)));
                     dialog.cancel();
                 });
                 builder.setNegativeButton(ConstStrings.Cancel, (dialog, which) -> {
@@ -165,7 +179,11 @@ public class MainActivity extends BaseActivity {
         switch (requestCode) {
             case 1:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //创建文件夹
+                    File external = Environment.getExternalStorageDirectory();
+                    File downloadFolder = new File(external.getPath() + Key.DownLoadPath);
+                    if (!downloadFolder.exists()) {
+                        downloadFolder.mkdirs();
+                    }
                     break;
                 }
         }
@@ -183,7 +201,7 @@ public class MainActivity extends BaseActivity {
                         res = response.body().string();
                         if (null != response) {
                             BaseMsg<List<FileMsg>> baseMsg = (BaseMsg<List<FileMsg>>) MyGson.getObject(res
-                                    , App.fileListType);
+                                    , new TypeToken<BaseMsg<List<FileMsg>>>() {}.getType());
                             Bundle bundle = new Bundle();
                             Intent intent = new Intent(this, FileListActivity.class);
                             bundle.putSerializable(Key.FileListKey, (Serializable) baseMsg.msg);

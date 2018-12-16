@@ -1,10 +1,10 @@
-package cn.hy.netfiletool.dao;
+package cn.hy.netfiletool.database.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import cn.hy.netfiletool.dao.base.MyDataBase;
+import cn.hy.netfiletool.database.MyDataBase;
 
 public class DaoSupport extends MyDataBase {
 

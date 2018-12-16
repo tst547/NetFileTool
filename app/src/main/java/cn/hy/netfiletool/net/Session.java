@@ -1,8 +1,9 @@
 package cn.hy.netfiletool.net;
 
 
-import cn.hy.netfiletool.box.ConstStrings;
-import cn.hy.netfiletool.box.Key;
+import cn.hy.netfiletool.bean.HostInfo;
+import cn.hy.netfiletool.key.ConstStrings;
+import cn.hy.netfiletool.key.Key;
 import cn.hy.netfiletool.common.FileUtil;
 import cn.hy.netfiletool.common.WifiUtil;
 import cn.hy.netfiletool.net.download.DownLoadMsg;
@@ -13,14 +14,14 @@ import java.util.Map;
 
 /**
  * 跟主机相关交互的操作
- * Created by hanyu on 2017/11/16 0016.
+ * Created by temp547 on 2017/11/16 0016.
  */
 public class Session {
 
     private String urlBase;
 
     private Session(String urlBase) {
-
+        this.urlBase = urlBase;
     }
 
     public String getUrlBase(){

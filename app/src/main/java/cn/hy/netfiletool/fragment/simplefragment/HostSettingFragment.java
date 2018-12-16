@@ -1,4 +1,4 @@
-package cn.hy.netfiletool.fragment;
+package cn.hy.netfiletool.fragment.simplefragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,7 +1,7 @@
-package cn.hy.netfiletool.box;
+package cn.hy.netfiletool.key;
 
 /**
- * Created by hanyu on 2017/11/16 0016.
+ * Created by temp547 on 2017/11/16 0016.
  */
 public class Key {
 
@@ -20,7 +20,8 @@ public class Key {
     public static final int ProRefresh = 50;
     public final static int MSG_SUCCESS = 200;
 
-    public static final int ServerScannerPort = 22555; //扫描消息接收端口(广播)
+    public static final int ServerScannerPort = 22555; //扫描消息端口(广播)
+    public static final int ScannerRecvPort = 22455; //扫描消息接收端口
 
 
 

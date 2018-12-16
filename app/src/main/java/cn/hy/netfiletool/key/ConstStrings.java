@@ -1,7 +1,7 @@
-package cn.hy.netfiletool.box;
+package cn.hy.netfiletool.key;
 
 /**
- * Created by Administrator on 2017/11/16 0016.
+ * Created by temp547 on 2017/11/16 0016.
  */
 public class ConstStrings {
 
@@ -46,5 +46,7 @@ public class ConstStrings {
     public static final String FailedFileList = "文件列表加载错误";
 
 
-
+    public static final String VideoIntentType = "video/*";//视频播放intent类型
+    public static final String Delete = "删除";
+    public static final String HostDetail = "详情";
 }

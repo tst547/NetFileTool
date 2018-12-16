@@ -1,4 +1,4 @@
-package cn.hy.netfiletool.pojo;
+package cn.hy.netfiletool.net.pojo;
 
 import java.io.Serializable;
 

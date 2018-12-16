@@ -1,6 +1,7 @@
 package cn.hy.netfiletool.activity;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -12,17 +13,18 @@ import android.os.Environment;
 import android.view.*;
 import android.widget.*;
 import cn.hy.netfiletool.R;
-import cn.hy.netfiletool.box.App;
-import cn.hy.netfiletool.box.ConstStrings;
-import cn.hy.netfiletool.box.Key;
+import cn.hy.netfiletool.common.MyMath;
+import cn.hy.netfiletool.key.ConstStrings;
+import cn.hy.netfiletool.key.Key;
 import cn.hy.netfiletool.common.FileUtil;
 import cn.hy.netfiletool.common.MyGson;
-import cn.hy.netfiletool.net.HostInfo;
+import cn.hy.netfiletool.bean.HostInfo;
 import cn.hy.netfiletool.net.IOStream;
 import cn.hy.netfiletool.net.download.DownLoadMsg;
 import cn.hy.netfiletool.net.download.Progress;
-import cn.hy.netfiletool.pojo.BaseMsg;
-import cn.hy.netfiletool.pojo.FileMsg;
+import cn.hy.netfiletool.net.pojo.BaseMsg;
+import cn.hy.netfiletool.net.pojo.FileMsg;
+import com.google.gson.reflect.TypeToken;
 
 public class FileListActivity extends BaseActivity{
 
@@ -59,7 +61,7 @@ public class FileListActivity extends BaseActivity{
                     BaseMsg<List<FileMsg>> baseMsg;
                     try {
                         baseMsg = (BaseMsg<List<FileMsg>>) MyGson.getObject(response.body().string()
-                                , App.fileListType);
+                                , new TypeToken<BaseMsg<List<FileMsg>>>() {}.getType());
                         Intent intent = new Intent(FileListActivity.this
                                 , FileListActivity.class);
                         Bundle bundle = new Bundle();
@@ -79,24 +81,30 @@ public class FileListActivity extends BaseActivity{
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                String url = getSession(currentHost)
-                        .getUrlBase().concat("/fileIO?filePath=").concat(path);
+                StringBuilder url = new StringBuilder();
+                url.append(getSession(currentHost)
+                        .getUrlBase())
+                        .append(ConstStrings.FileIOURL)
+                        .append(ConstStrings.Question)
+                        .append(Key.FilePathKey)
+                        .append(ConstStrings.Equal)
+                        .append(path);
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-                String type = "video/*";
-                Uri uri = Uri.parse(url);
+                String type = ConstStrings.VideoIntentType;
+                Uri uri = Uri.parse(url.toString());
                 intent.setDataAndType(uri,type);
                 startActivity(intent);
             }
         });
         hlv.setOnItemLongClickListener((adapterView, view, pos, n) -> {
             FileMsg file = (FileMsg) hlv.getItemAtPosition(pos);
-            AlertDialog.Builder builder = new AlertDialog.Builder(FileListActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             String[] options = {ConstStrings.Detail, ConstStrings.DownLoad};
             builder
                     .setItems(options, (dialog, which) -> {
                         if (which == 0)
-                            dialogShowMsg(ConstStrings.Detail, App.getFileMsg(file));
+                            dialogShowMsg(ConstStrings.Detail, getFileMsg(file));
                         if (which == 1) {
                             Progress progress = new Progress();
                             progress.setMax(file.size);
@@ -108,16 +116,45 @@ public class FileListActivity extends BaseActivity{
                             try {
                                 downLoadMsg.setFile(FileUtil.createFileByBaseFile(file.name
                                         ,externalRootFile.getPath() + Key.DownLoadPath));
-                                IOStream.down(currentHost,downLoadMsg);
+                                IOStream.down(getSession(currentHost),downLoadMsg);
                             } catch (IOException e) {
                                 downLoadMsg.setRunFlag(false);
                             }
-                            App.downloadMsgs.add(downLoadMsg);
+                            appBox.getDownloadMsgs().add(downLoadMsg);
                         }
                     })
                     .show();
             return true;
         });
+    }
+
+    /**
+     * 文件信息拼装
+     * 返回的字符串每个属性段都会换行显示
+     * TODO 该方法属于妥协 正确情况应建立view 填充数据
+     * @param file
+     * @return
+     */
+    public String getFileMsg(FileMsg file) {
+        return new StringBuffer(ConstStrings.FileName)
+                .append(ConstStrings.Colon)
+                .append(file.name)
+                .append(ConstStrings.LineSeparator)//换行符
+                .append(ConstStrings.FilePath)
+                .append(ConstStrings.Colon)
+                .append(file.path)
+                .append(ConstStrings.LineSeparator)//换行符
+                .append(ConstStrings.FileType)
+                .append(ConstStrings.Colon)
+                .append(file.isDir ? ConstStrings.Folder : ConstStrings.File)
+                .append(ConstStrings.LineSeparator)//换行符
+                .append(ConstStrings.FileSize)
+                .append(ConstStrings.Colon)
+                .append((file.size > 1048576 ? MyMath.divide(file.size, 1048576, ConstStrings.DivideFormat).concat(ConstStrings.FileUnits)
+                        : (file.size > 1024 ? MyMath.divide(file.size, 1024, ConstStrings.DivideFormat).concat(ConstStrings.FileUnitsKb)
+                        : String.valueOf(file.size).concat(ConstStrings.FileUnitsByte))))
+                .toString();
+
     }
 
     class CustomAdapter extends BaseAdapter {

@@ -1,12 +1,12 @@
 package cn.hy.netfiletool.net.download;
 
-import cn.hy.netfiletool.pojo.FileMsg;
+import cn.hy.netfiletool.net.pojo.FileMsg;
 
 import java.io.File;
 
 /**
  * 下载信息
- * @author hanyu
+ * @author temp547
  *
  */
 public class DownLoadMsg {

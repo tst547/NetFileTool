@@ -1,4 +1,4 @@
-package cn.hy.netfiletool.dao.base;
+package cn.hy.netfiletool.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +8,7 @@ import android.util.Log;
 /**
  * 数据库sqlite交互类
  * 
- * @author hanyu
+ * @author temp547
  * 
  */
 public class MyDataBase extends SQLiteOpenHelper {

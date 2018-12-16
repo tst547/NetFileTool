@@ -1,4 +1,4 @@
-package cn.hy.netfiletool.net;
+package cn.hy.netfiletool.bean;
 
 import java.io.Serializable;
 

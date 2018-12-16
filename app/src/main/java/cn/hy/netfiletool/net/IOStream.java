@@ -1,7 +1,6 @@
 package cn.hy.netfiletool.net;
 
-import cn.hy.netfiletool.box.App;
-import cn.hy.netfiletool.box.ConstStrings;
+import cn.hy.netfiletool.key.ConstStrings;
 import cn.hy.netfiletool.common.MyMath;
 import cn.hy.netfiletool.net.download.DownLoadMsg;
 import cn.hy.netfiletool.net.download.Progress;
@@ -11,8 +10,8 @@ import java.io.*;
 
 public class IOStream {
 
-    public static Call down(HostInfo hostInfo, DownLoadMsg downLoadMsg){
-            return App.getSession(hostInfo).fileIO(downLoadMsg, ((call, response) -> {
+    public static Call down(Session session, DownLoadMsg downLoadMsg){
+            return session.fileIO(downLoadMsg, ((call, response) -> {
                 Progress progress = downLoadMsg.getProgress();
                 File fl = downLoadMsg.getFile();
                 FileOutputStream bos = null;

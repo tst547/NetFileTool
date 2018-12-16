@@ -1,4 +1,4 @@
-package cn.hy.netfiletool.fragment;
+package cn.hy.netfiletool.fragment.listfragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,8 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import cn.hy.netfiletool.R;
+import cn.hy.netfiletool.fragment.BaseListFragment;
 
-public class DownLoadListFragment extends Fragment {
+public class DownLoadListFragment extends BaseListFragment {
 
     public DownLoadListFragment(){
         super();

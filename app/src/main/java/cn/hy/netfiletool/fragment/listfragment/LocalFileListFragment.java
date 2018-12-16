@@ -1,10 +1,9 @@
-package cn.hy.netfiletool.fragment;
+package cn.hy.netfiletool.fragment.listfragment;
 
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +12,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import cn.hy.netfiletool.R;
-import cn.hy.netfiletool.box.ConstStrings;
+import cn.hy.netfiletool.fragment.BaseListFragment;
+import cn.hy.netfiletool.key.ConstStrings;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocalFileListFragment extends ListFragment{
+public class LocalFileListFragment extends BaseListFragment {
 
     private File externalRootFile;
 
@@ -35,12 +35,13 @@ public class LocalFileListFragment extends ListFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         externalRootFile = Environment.getExternalStorageDirectory();
-        for (File temp : externalRootFile.listFiles()){
-            MobileFile mobileFile = new MobileFile();
-            mobileFile.file = temp;
-            mobileFile.fileName = temp.getName();
-            fileList.add(mobileFile);
-        }
+        if (null!=externalRootFile)
+            for (File temp : externalRootFile.listFiles()){
+                MobileFile mobileFile = new MobileFile();
+                mobileFile.file = temp;
+                mobileFile.fileName = temp.getName();
+                fileList.add(mobileFile);
+            }
         return inflater.inflate(R.layout.local_file_list_fragment, container, false);
     }
 
@@ -59,6 +60,7 @@ public class LocalFileListFragment extends ListFragment{
         customAdapter = new CustomAdapter(files);
         setListAdapter(customAdapter);
     }
+
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -81,7 +83,6 @@ public class LocalFileListFragment extends ListFragment{
                     fileList.add(mobileFile);
                 }
         }
-
         new Handler().postDelayed(()-> initList(fileList),200);
     }
 
