@@ -5,7 +5,6 @@ import android.net.wifi.WifiManager;
 import android.os.Environment;
 import cn.hy.netfiletool.common.MyMath;
 import cn.hy.netfiletool.common.WifiUtil;
-import cn.hy.netfiletool.dao.DaoSupport;
 import cn.hy.netfiletool.dao.HostDao;
 import cn.hy.netfiletool.net.HostInfo;
 import cn.hy.netfiletool.net.Scanner;
@@ -20,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,25 +29,15 @@ import java.util.Map;
  */
 public class App {
 
-    public static boolean isHostListStarted;
-
     public static HostDao hostDao;
 
     public static List<DownLoadMsg> downloadMsgs = new ArrayList<>();//下载信息列表
 
     public static List<ProgressTask> taskList = new ArrayList<>();//进度条刷新任务列表
 
-    public static String SdCardPath = Environment.getExternalStorageDirectory()
-            + "/";
-    public static File path;
-
     public static Type fileListType = new TypeToken<BaseMsg<List<FileMsg>>>() {}.getType();
 
-    private static int ServerScannerPort = 22555; //扫描消息接收端口(广播)
-
     private static Map<String,HostInfo> hostMap;
-
-    public static String DownLoadPath = "JCdownload";// 文件到手机SD卡上的指定目录
 
     public static NetWorkInfo netWorkInfo;//网路配置信息
 
@@ -57,9 +45,10 @@ public class App {
 
     static {
         netWorkInfo = new NetWorkInfo();
-        path = new File(App.SdCardPath + App.DownLoadPath);
-        if (!path.exists()) {
-            path.mkdirs();
+        File external = Environment.getExternalStorageDirectory();
+        File downloadFolder = new File(external.getPath() + Key.DownLoadPath);
+        if (!downloadFolder.exists()) {
+            downloadFolder.mkdirs();
         }
     }
 
@@ -70,9 +59,16 @@ public class App {
         return hostMap;
     }
 
+    /**
+     * 新增地址
+     * @param key
+     * @param hostInfo
+     */
     public static void addAddress(String key,HostInfo hostInfo){
-        getHostMap().put(key,hostInfo);
-        hostDao.add(hostInfo);
+        if(!getHostMap().containsKey(key)){
+            getHostMap().put(key,hostInfo);
+            hostDao.add(hostInfo);
+        }
     }
 
     /**
@@ -80,19 +76,19 @@ public class App {
      * @param wm
      */
     public static void readWifiInfo(WifiManager wm) {
-        // WifiInfo wifiInfo = wm.getConnectionInfo();
         DhcpInfo di = wm.getDhcpInfo();
+        //如果获取子网掩码失败 设置默认子网掩码为255.255.255.0
         netWorkInfo.setNetmask(di.netmask==0?4294967040l:di.netmask);
         netWorkInfo.setIp(WifiUtil.ip2long(WifiUtil.androidLong2ip(di.ipAddress)));
         netWorkInfo.setBroadcastAddr(netWorkInfo.getNetmask(),netWorkInfo.getIp());
         netWorkInfo.setGateWay(WifiUtil.ip2long(WifiUtil.androidLong2ip(di.gateway)));
-        netWorkInfo.setScanPort(App.ServerScannerPort);
+        netWorkInfo.setScanPort(Key.ServerScannerPort);
         scanner = new Scanner(netWorkInfo);
         scanner.start();
     }
 
-    public static Session getSession() {
-        return Session.create();
+    public static Session getSession(HostInfo hostInfo) {
+        return Session.create(hostInfo);
     }
 
     public static String getFileMsg(FileMsg file) {

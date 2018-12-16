@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +13,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import cn.hy.netfiletool.R;
-import cn.hy.netfiletool.box.App;
 import cn.hy.netfiletool.box.ConstStrings;
-import cn.hy.netfiletool.common.WifiUtil;
-import cn.hy.netfiletool.net.HostInfo;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class LocalFileListFragment extends ListFragment{
+
+    private File externalRootFile;
 
     private CustomAdapter customAdapter;
 
@@ -38,8 +34,8 @@ public class LocalFileListFragment extends ListFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        File current = new File(String.valueOf(Environment.getExternalStorageDirectory()));
-        for (File temp : current.listFiles()){
+        externalRootFile = Environment.getExternalStorageDirectory();
+        for (File temp : externalRootFile.listFiles()){
             MobileFile mobileFile = new MobileFile();
             mobileFile.file = temp;
             mobileFile.fileName = temp.getName();
@@ -69,7 +65,8 @@ public class LocalFileListFragment extends ListFragment{
         MobileFile clickFile = (MobileFile) customAdapter.getItem(position);
         if (clickFile.file.isDirectory()){
             fileList.clear();
-            if(!clickFile.fileName.equals(ConstStrings.Back)){
+            if(!externalRootFile.getPath()
+                    .equals(clickFile.file.getPath())){
                 //拿当前点击文件的父级作为返回文件，实现点击该文件时返回上级
                 MobileFile backFile = new MobileFile();
                 backFile.fileName =ConstStrings.Back;

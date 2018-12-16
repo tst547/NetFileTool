@@ -9,7 +9,6 @@ public class ProgressTask extends AsyncTask<Integer, Integer, Integer> {
 
     private volatile boolean run = true;
 
-
     private DownLoadMsg loadMsg;
 
     public ProgressTask(DownLoadMsg loadMsg){

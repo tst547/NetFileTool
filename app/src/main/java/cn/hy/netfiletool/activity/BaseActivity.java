@@ -2,7 +2,6 @@ package cn.hy.netfiletool.activity;
 
 
 import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,10 +9,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+import cn.hy.netfiletool.box.App;
+import cn.hy.netfiletool.net.HostInfo;
+import cn.hy.netfiletool.net.Session;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected Intent intent;//获取Activity传递过来的数据
+
+    /**
+     * 获取当前会话
+     * @return
+     */
+    protected Session getSession(HostInfo hostInfo){
+        return App.getSession(hostInfo);
+    }
 
     /**
      * 将当前Activity添加到App类中
@@ -74,11 +84,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 加载一条信息提示
      *
-     * @param context
      * @param msg
      */
-    protected void toastMsg(Context context, String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+    protected void toastMsg(String msg) {
+        Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT)
                 .show();
     }
 

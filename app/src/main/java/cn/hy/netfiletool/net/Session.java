@@ -1,6 +1,7 @@
 package cn.hy.netfiletool.net;
 
 
+import cn.hy.netfiletool.box.ConstStrings;
 import cn.hy.netfiletool.box.Key;
 import cn.hy.netfiletool.common.FileUtil;
 import cn.hy.netfiletool.common.WifiUtil;
@@ -18,9 +19,8 @@ public class Session {
 
     private String urlBase;
 
-    private static Session session;
+    private Session(String urlBase) {
 
-    private Session() {
     }
 
     public String getUrlBase(){
@@ -28,26 +28,18 @@ public class Session {
     }
 
     /**
+     * 根据URL创建一个访问会话
      * @return
      */
-    public static Session create() {
-        if (null == session) {
-            session = new Session();
-        }
-        return session;
-    }
-
-    public Session setHostInfo(HostInfo hostInfo) {
+    public static Session create(HostInfo hostInfo) {
         StringBuffer stringBuffer = new StringBuffer();
-        this.urlBase = stringBuffer
-                .append("http://")
+        return new Session(stringBuffer
+                .append(ConstStrings.HTTP_URL_PERFIX)
                 .append(WifiUtil.long2ip(hostInfo.getHostIp()))
-                .append(":")
+                .append(ConstStrings.Colon)
                 .append(hostInfo.getHostPort())
-                .toString();
-        return this;
+                .toString());
     }
-
 
     /**
      * 文件列表
@@ -59,7 +51,7 @@ public class Session {
         Map<String, Object> temp = new HashMap<>();
         if (null != filePath)
             temp.put(Key.FilePathKey, filePath);
-        get(Key.PathListKey, temp, able);
+        get(ConstStrings.PathListURL, temp, able);
     }
 
     /**
@@ -67,7 +59,7 @@ public class Session {
      * @param downLoadMsg
      * @param able
      */
-    public Call fileDownLoad(DownLoadMsg downLoadMsg, OKHttpCallback.Netable able) {
+    public Call fileIO(DownLoadMsg downLoadMsg, OKHttpCallback.Netable able) {
             long size;
             if ((size = FileUtil.getFileSize(downLoadMsg.getFile()))!=downLoadMsg.getProgress().getOffset())
                 downLoadMsg.getProgress().setOffset(size);
@@ -76,13 +68,13 @@ public class Session {
                     .add(Key.FilePathKey, downLoadMsg.getBaseFile().path)
                     .build();
             Request request = new Request.Builder()
-                    .url(urlBase + "/fileDL")
+                    .url(urlBase + ConstStrings.FileIOURL)
                     .addHeader(Key.Range
                             ,String.valueOf(downLoadMsg
                                     .getProgress()
                                     .getOffset() > 0 ? downLoadMsg
                                     .getProgress()
-                                    .getOffset()+"-" : 0))
+                                    .getOffset()+ConstStrings.Offset : 0))
                     .post(body)
                     .build();
             Call call = okHttpClient.newCall(request);
@@ -100,10 +92,12 @@ public class Session {
     private void get(String path, Map<String, Object> params, OKHttpCallback.Netable able) {
         if (null != params)
             for (Map.Entry<String, Object> entry : params.entrySet()) {
-                if (!path.endsWith("&") && !path.contains("&"))
-                    path = path.concat("?" + entry.getKey() + "=" + entry.getValue());
+                if (!path.endsWith(ConstStrings.UrlAnd) && !path.contains(ConstStrings.UrlAnd))
+                    path = path.concat(ConstStrings.Question
+                            + entry.getKey() + ConstStrings.Equal + entry.getValue());
                 else
-                    path = path.concat("&" + entry.getKey() + "=" + entry.getValue());
+                    path = path.concat(ConstStrings.UrlAnd
+                            + entry.getKey() + ConstStrings.Equal + entry.getValue());
             }
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
@@ -112,6 +106,5 @@ public class Session {
         Call call = okHttpClient.newCall(request);
         call.enqueue(new OKHttpCallback(able));
     }
-
 
 }

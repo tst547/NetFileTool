@@ -1,10 +1,5 @@
 package cn.hy.netfiletool.net;
 
-import android.support.annotation.IntegerRes;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 网络配置信息
  */

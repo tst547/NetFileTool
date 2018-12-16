@@ -1,8 +1,5 @@
 package cn.hy.netfiletool.common;
 
-import android.util.Log;
-import cn.hy.netfiletool.box.App;
-import cn.hy.netfiletool.pojo.FileMsg;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +14,7 @@ public class FileUtil {
 	 * @param filePath
 	 */
 	public static File createDirs(String filePath) {
-		File file = new File(App.path.getPath() + "/" + filePath);
+		File file = new File(filePath);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
@@ -30,21 +27,21 @@ public class FileUtil {
 	 * @param filePath
 	 */
 	public static File createFile(String filePath) {
-		File fl = new File(App.path.getPath() + "/" + filePath);
+		File fl = new File(filePath);
 		try {
 			if (!fl.exists()) {
 				fl.createNewFile();
 			} else {
 				int num = 1;
 				while (!fl.exists()) {
-					fl = new File(App.path.getPath() + "/" + "(" + num + ")"
+					fl = new File("/" + "(" + num + ")"
 							+ filePath);
 					num++;
 				}
 				fl.createNewFile();
 			}
 		} catch (IOException e) {
-			Log.e("createFile", e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 		return fl;
@@ -88,24 +85,24 @@ public class FileUtil {
 	/**
 	 * 根据Base.File对象创建
 	 * 手机对应文件
-	 *
-	 * @param fi
+	 * @param fileName
+	 * @param path
 	 * @return
 	 * @throws IOException
 	 */
-	public static File createFileByBaseFile(FileMsg fi,String pathName) throws IOException {
-		File path = new File(pathName);
-		if (!path.exists()) {
-			path.mkdirs();
+	public static File createFileByBaseFile(String fileName, String path) throws IOException {
+		File file = new File(path);
+		if (!file.exists()) {
+			file.mkdirs();
 		}
-		File fl = new File(path.getPath() + "/" + fi.name);
+		File fl = new File(file.getPath() + "/" + fileName);
 		if (!fl.exists()) {
 			fl.createNewFile();
 		} else {
 			int num = 1;
 			while (fl.exists()) {
-				fl = new File(path.getPath() + "/" + "(" + num + ")"
-						+ fi.name);
+				fl = new File(file.getPath() + "/" + "(" + num + ")"
+						+ fileName);
 				num++;
 			}
 			fl.createNewFile();

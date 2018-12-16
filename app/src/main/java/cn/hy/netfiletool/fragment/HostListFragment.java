@@ -1,10 +1,8 @@
 package cn.hy.netfiletool.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -12,18 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import cn.hy.netfiletool.R;
-import cn.hy.netfiletool.activity.FileListActivity;
+import cn.hy.netfiletool.activity.MainActivity;
 import cn.hy.netfiletool.box.App;
-import cn.hy.netfiletool.box.ConstStrings;
-import cn.hy.netfiletool.box.Key;
-import cn.hy.netfiletool.common.MyGson;
 import cn.hy.netfiletool.common.WifiUtil;
 import cn.hy.netfiletool.net.HostInfo;
-import cn.hy.netfiletool.pojo.BaseMsg;
-import cn.hy.netfiletool.pojo.FileMsg;
 
-import java.io.IOException;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,26 +61,10 @@ public class HostListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         HostInfo host = (HostInfo) customAdapter.getItem(position);
-        Intent intent = new Intent(getActivity(), FileListActivity.class);
-        App.getSession().setHostInfo(host).getFileList(null
-                , ((call, response) -> {
-                    String res ;
-                    try {
-                        res = response.body().string();
-                        if (null != response) {
-                            BaseMsg<List<FileMsg>> baseMsg = (BaseMsg<List<FileMsg>>) MyGson.getObject(res
-                                    , App.fileListType);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable(Key.FileListKey, (Serializable) baseMsg.msg);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getContext(), ConstStrings.FailedFileList, Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                }));
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.openHostFileList(host);
+
     }
 
     /**

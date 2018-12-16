@@ -11,8 +11,8 @@ import java.io.*;
 
 public class IOStream {
 
-    public static Call down(DownLoadMsg downLoadMsg){
-            return App.getSession().fileDownLoad(downLoadMsg, ((call, response) -> {
+    public static Call down(HostInfo hostInfo, DownLoadMsg downLoadMsg){
+            return App.getSession(hostInfo).fileIO(downLoadMsg, ((call, response) -> {
                 Progress progress = downLoadMsg.getProgress();
                 File fl = downLoadMsg.getFile();
                 FileOutputStream bos = null;
