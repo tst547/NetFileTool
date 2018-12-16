@@ -1,7 +1,6 @@
 package cn.hy.netfiletool.activity;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.List;
 

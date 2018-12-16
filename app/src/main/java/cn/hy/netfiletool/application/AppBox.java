@@ -1,24 +1,14 @@
 package cn.hy.netfiletool.application;
 
 import android.app.Application;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiManager;
-import android.os.Environment;
 import cn.hy.netfiletool.application.collection.HostData;
-import cn.hy.netfiletool.key.Key;
-import cn.hy.netfiletool.common.WifiUtil;
 import cn.hy.netfiletool.bean.HostInfo;
 import cn.hy.netfiletool.net.Scanner;
 import cn.hy.netfiletool.net.Session;
 import cn.hy.netfiletool.net.download.DownLoadMsg;
 import cn.hy.netfiletool.net.NetWorkInfo;
 import cn.hy.netfiletool.net.download.ProgressTask;
-import cn.hy.netfiletool.net.pojo.BaseMsg;
-import cn.hy.netfiletool.net.pojo.FileMsg;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
