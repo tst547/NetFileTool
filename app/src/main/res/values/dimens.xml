@@ -2,4 +2,95 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+
+
+
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="slidingmenu_offset">180dp</dimen>
+    <dimen name="list_padding">10dp</dimen>
+    <dimen name="shadow_width">5dp</dimen>
+    <dimen name="bottom_tab_padding_drawable">0dip</dimen>
+    <dimen name="bottom_tab_padding_up">2.0dip</dimen>
+    <!-- <dimen name="bottom_tab_font_size">14.0sp</dimen> -->
+
+    <dimen name="tag_corner_radius">20.0dip</dimen>
+
+    <dimen name="frag_data_top_font_size">16dp</dimen>
+    <dimen name="size_1">2px</dimen>
+    <dimen name="size_2">4px</dimen>
+    <dimen name="size_3">6px</dimen>
+    <dimen name="size_4">8px</dimen>
+    <dimen name="size_5">10px</dimen>
+    <dimen name="size_6">12px</dimen>
+    <dimen name="size_7">14px</dimen>
+    <dimen name="size_8">16px</dimen>
+    <dimen name="size_9">18px</dimen>
+    <dimen name="size_10">20px</dimen>
+    <dimen name="size_11">22px</dimen>
+    <dimen name="size_12">24px</dimen>
+    <dimen name="size_13">26px</dimen>
+    <dimen name="size_14">28px</dimen>
+    <dimen name="size_15">30px</dimen>
+    <dimen name="size_16">32px</dimen>
+    <dimen name="size_17">34px</dimen>
+    <dimen name="size_18">36px</dimen>
+    <dimen name="size_19">38px</dimen>
+    <dimen name="size_20">40px</dimen>
+    <dimen name="size_21">42px</dimen>
+    <dimen name="size_22">44px</dimen>
+    <dimen name="size_23">46px</dimen>
+    <dimen name="size_24">48px</dimen>
+    <dimen name="size_25">50px</dimen>
+    <dimen name="size_26">52px</dimen>
+    <dimen name="size_27">54px</dimen>
+    <dimen name="size_28">56px</dimen>
+    <dimen name="size_29">28px</dimen>
+    <dimen name="size_30">60px</dimen>
+    <dimen name="size_31">62px</dimen>
+    <dimen name="size_32">64px</dimen>
+    <dimen name="size_33">66px</dimen>
+    <dimen name="size_34">68px</dimen>
+    <dimen name="size_35">70px</dimen>
+    <dimen name="size_36">72px</dimen>
+    <dimen name="size_37">74px</dimen>
+    <dimen name="size_38">76px</dimen>
+    <dimen name="size_39">78px</dimen>
+    <dimen name="size_40">80px</dimen>
+    <dimen name="size_45">90px</dimen>
+    <dimen name="size_46">92px</dimen>
+    <dimen name="size_50">100px</dimen>
+    <dimen name="size_55">110px</dimen>
+    <dimen name="size_60">120px</dimen>
+    <dimen name="size_66">132px</dimen>
+    <dimen name="size_70">140px</dimen>
+    <dimen name="size_75">150px</dimen>
+    <dimen name="size_80">160px</dimen>
+    <dimen name="size_85">170px</dimen>
+    <dimen name="size_90">180px</dimen>
+    <dimen name="size_95">190px</dimen>
+    <dimen name="size_100">200px</dimen>
+    <dimen name="size_105">210px</dimen>
+    <dimen name="size_110">220px</dimen>
+    <dimen name="size_115">230px</dimen>
+    <dimen name="size_120">240px</dimen>
+    <dimen name="size_125">250px</dimen>
+    <dimen name="size_130">260px</dimen>
+    <dimen name="size_135">270px</dimen>
+    <dimen name="size_140">280px</dimen>
+    <dimen name="size_145">290px</dimen>
+    <dimen name="size_150">300px</dimen>
+    <dimen name="size_155">310px</dimen>
+    <dimen name="size_160">320px</dimen>
+    <dimen name="size_165">330px</dimen>
+    <dimen name="size_170">340px</dimen>
+    <dimen name="size_175">350px</dimen>
+    <dimen name="size_180">360px</dimen>
+    <dimen name="size_185">370px</dimen>
+    <dimen name="size_190">380px</dimen>
+    <dimen name="size_195">390px</dimen>
+    <dimen name="size_200">400px</dimen>
+    <dimen name="size_230">460px</dimen>
 </resources>

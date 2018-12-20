@@ -162,6 +162,11 @@ public class MainActivity extends BaseActivity {
                             .concat(ConstStrings.Colon)
                             .concat(port),new HostInfo(WifiUtil.ip2long(address),Integer.valueOf(port)));
                     dialog.cancel();
+                    viewPager.setCurrentItem(0);
+                    Fragment fragment = ((ViewPagerAdapter)viewPager.getAdapter()).getCurrentFragment();
+                    if (fragment instanceof HostListFragment){
+                        ((HostListFragment) fragment).loadViewList();
+                    }
                 });
                 builder.setNegativeButton(ConstStrings.Cancel, (dialog, which) -> {
                     dialog.cancel();
@@ -208,6 +213,8 @@ public class MainActivity extends BaseActivity {
                             bundle.putSerializable(Key.HostInfoKey, host);
                             intent.putExtras(bundle);
                             startActivity(intent);
+                        }else {
+                            toastMsg(ConstStrings.ConnFailed);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -220,9 +227,22 @@ public class MainActivity extends BaseActivity {
 
         private final List<Fragment> mFragmentList = new ArrayList<>();
 
+        private Fragment currentFragment;
+
+        public Fragment getCurrentFragment(){
+            return this.currentFragment;
+        }
+
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            this.currentFragment = (Fragment) object;
+        }
+
 
         @Override
         public Fragment getItem(int position) {

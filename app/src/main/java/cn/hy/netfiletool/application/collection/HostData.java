@@ -32,7 +32,7 @@ public class HostData {
     }
 
     public synchronized boolean deleteHost(String key){
-        if (!dataMap.containsKey(key)){
+        if (dataMap.containsKey(key)){
             dataMap.remove(key);
             hostDao.delete(key);
             return true;

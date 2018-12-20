@@ -35,7 +35,7 @@ public class LocalFileListFragment extends BaseListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         externalRootFile = Environment.getExternalStorageDirectory();
-        if (null!=externalRootFile)
+        if (null!=externalRootFile||null!=externalRootFile.listFiles())
             for (File temp : externalRootFile.listFiles()){
                 MobileFile mobileFile = new MobileFile();
                 mobileFile.file = temp;

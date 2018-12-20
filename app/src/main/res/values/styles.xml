@@ -8,4 +8,33 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="fount_14">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/size_14</item>
+    </style>
+    <style name="fount_12">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/size_12</item>
+    </style>
+    <style name="fount_10">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/size_10</item>
+    </style>
+    <style name="btn_state">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/size_10</item>
+        <item name="android:layout_marginBottom">@dimen/size_10</item>
+        <item name="android:layout_marginLeft">@dimen/size_5</item>
+        <item name="android:layout_marginRight">@dimen/size_5</item>
+        <item name="android:paddingLeft">@dimen/size_10</item>
+        <item name="android:paddingRight">@dimen/size_10</item>
+        <item name="android:paddingTop">@dimen/size_5</item>
+        <item name="android:paddingBottom">@dimen/size_5</item>
+        <item name="android:textSize">@dimen/size_12</item>
+    </style>
 </resources>

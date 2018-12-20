@@ -65,6 +65,7 @@ public class FileListActivity extends BaseActivity{
                                 , FileListActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(Key.FileListKey, (Serializable) baseMsg.msg);
+                        bundle.putSerializable(Key.HostInfoKey, currentHost);
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } catch (IOException e) {

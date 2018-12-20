@@ -3,4 +3,117 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <color name="menu_item_text_color">#E60200</color>
+
+
+    <!--横线色  -->
+    <color name="lines_item_color">#eeeeee</color>
+    <color name="color_line">#eeeeee</color>
+
+    <color name="white">#ffffff</color>
+    <color name="fount_color">#333333</color>
+    <!--<color name="fount_color">#ffffff</color>-->
+    <color name="fount_blue">#5cb2ff</color>
+    <color name="fount_gray_color">#b0b0b0</color>
+    <color name="green">#00c8c8</color>
+    <!-- 背景色 -->
+    <color name="bg_gray">#f0f2f5</color>
+    <color name="yellow_dot">#f6c971</color>
+    <color name="bg_red">#F25244</color>
+    <color name="text_red">#ff6042</color>
+    <!-- 按钮红色 -->
+    <color name="btn_red">#d74730</color>
+    <!-- 贴条否背景色 -->
+    <color name="bg_trans_yello">#CCffb400</color>
+    <color name="bg_trans_orange">#CCf3880a</color>
+    <color name="bg_trans_red">#CCd9221e</color>
+
+
+
+    <color name="bg_lite_black">#19000000</color>
+    <color name="bg_trans_black">#80000000</color>
+
+    <!-- 20%透明白色 -->
+    <color name="bg_trans_white">#CCffffff</color>
+    <!-- 文字灰 -->
+
+    <color name="transparent">#00000000</color>
+    <color name="black">#ff000000</color>
+
+
+    <!-- 淡灰色背景 -->
+    <color name="lite_gray">#dddddd</color>
+
+
+    <!-- 二维码 -->
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+
+    <!-- 按键背景 -->
+    <color name="item_nor">#FFFFFF</color>
+    <color name="item_press">#B0B0B0</color>
+
+
+
+    <!-- 文字颜色 -->
+    <color name="text_color">#2A7EB6</color>
+
+    <color name="t_red">#ff1e00</color>
+    <color name="t_orange">#f28504</color>
+    <!-- 四急颜色 -->
+    <color name="color_speed">#f28504</color>
+    <color name="color_slow">#00c8c8</color>
+    <color name="color_brake">#dc49f7</color>
+    <color name="color_tired">#d81e06</color>
+    <color name="color_night">#1296db</color>
+    <color name="color_turn">#f74c31</color>
+
+    <!-- 车辆体检 -->
+    <color name="dete_orange">#f39a00</color>
+    <color name="dete_red">#eb4b32</color>
+    <color name="dete_bask">#f27404</color>
+
+    <!-- 饼状图  图例颜色 -->
+    <color name="pie_speed">#6393ea</color>
+    <color name="pie_slow">#fc7d4f</color>
+    <color name="pie_turn">#31cb31</color>
+    <color name="pie_brake">#d86fd4</color>
+    <color name="pie_super">#6cbbeb</color>
+
+    <!-- 车辆体检进度条颜色 -->
+    <color name="gressbar_color">#ffaa00</color>
+    <!--l拉货-->
+
+    <color name="soil">#d6aa66</color>
+    <color name="soil_bg">#fcf3e5</color>
+    <color name="navpage">#FFE1E8EB</color>
+    <color name="white_tran">#E5ffffff</color>
+
+
+    <color name="simple_blue">#68aef8</color>
+    <color name="simple_orange">#f19a51</color>
+    <color name="simple_green">#68c368</color>
+    <color name="simple_light_blue">#57c9c8</color>
+
+    <color name="red_fail">#fe0100</color>
+    <color name="yellow_audit">#fedc35</color>
+
+    <!-- 背景色 -->
+    <color name="fount_gray_deep_color">#666666</color>
+    <color name="blue">#3cabdf</color>
+    <color name="bg_blue">#e6f2ff</color>
+    <color name="bg_orange">#fdf1e0</color>
+    <color name="bg_green">#e8f8e8</color>
+    <color name="bg_light_green">#d9f7f2</color>
+
+
+
+    <color name="btn_gray">#bfbfbf</color>
+
+    <color name="audit_hint">#e7ab87</color>
+
+    <color name="cancel_color">#ffb16a</color>
 </resources>

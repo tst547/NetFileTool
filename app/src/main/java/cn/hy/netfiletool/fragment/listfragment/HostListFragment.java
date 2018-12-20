@@ -39,7 +39,7 @@ public class HostListFragment extends BaseListFragment {
                 new Handler().postDelayed(()->{
                     initList(getAppBox().getHostData().values());
                     swipeRefreshLayout.setRefreshing(false);
-                },1200));
+                },800));
         return rootView;
     }
 
@@ -72,11 +72,13 @@ public class HostListFragment extends BaseListFragment {
             String[] options = {ConstStrings.Delete, ConstStrings.HostDetail};
             builder
                     .setItems(options, (dialog, which) -> {
-                        if (which == 0)
+                        if (which == 0){
                             getAppBox().getHostData().deleteHost(
-                                    String.valueOf(hostInfo.getHostIp())
+                                    WifiUtil.long2ip(hostInfo.getHostIp())
                                             .concat(ConstStrings.Colon)
                                             .concat(String.valueOf(hostInfo.getHostPort())));
+                            loadViewList();
+                        }
                         if (which == 1) {
 
                         }
@@ -89,6 +91,13 @@ public class HostListFragment extends BaseListFragment {
             dialog.show();
             return true;
         });
+    }
+
+    /**
+     * 加载列表
+     */
+    public void loadViewList(){
+        new Handler().postDelayed(()-> initList(getAppBox().getHostData().values()),100);
     }
 
     @Override
