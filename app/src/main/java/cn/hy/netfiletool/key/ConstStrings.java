@@ -47,6 +47,8 @@ public class ConstStrings {
 
 
     public static final String VideoIntentType = "video/*";//视频播放intent类型
+    public static final String ImageIntentType = "image/*";//浏览图片intent类型
+
     public static final String Delete = "删除";
     public static final String HostDetail = "详情";
 }

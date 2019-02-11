@@ -2,7 +2,9 @@ package cn.hy.netfiletool.activity;
 
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.view.*;
 import android.widget.*;
 import cn.hy.netfiletool.R;
 import cn.hy.netfiletool.common.MyMath;
+import cn.hy.netfiletool.component.showimagedialog.ShowImagesDialog;
 import cn.hy.netfiletool.key.ConstStrings;
 import cn.hy.netfiletool.key.Key;
 import cn.hy.netfiletool.common.FileUtil;
@@ -39,6 +42,7 @@ public class FileListActivity extends BaseActivity{
         List<FileMsg> fileList = (List<FileMsg>) getIntent().getExtras().get(Key.FileListKey);
         currentHost = (HostInfo) getIntent().getExtras().get(Key.HostInfoKey);
         // 加载该文件列表
+        fileList.stream().sorted();
         initList(fileList);
         externalRootFile = Environment.getExternalStorageDirectory();
     }
@@ -74,27 +78,20 @@ public class FileListActivity extends BaseActivity{
                     }
                 }));
             }
-            if(FileUtil.isVideo(file.name)){
-                String path = file.path;
-                try {
-                    path = URLEncoder.encode(path,"utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                StringBuilder url = new StringBuilder();
-                url.append(getSession(currentHost)
-                        .getUrlBase())
-                        .append(ConstStrings.FileIOURL)
-                        .append(ConstStrings.Question)
-                        .append(Key.FilePathKey)
-                        .append(ConstStrings.Equal)
-                        .append(path);
+            if(FileUtil.isVideo(file.name)){//如果是视频文件 则隐式调用播放器
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-                String type = ConstStrings.VideoIntentType;
-                Uri uri = Uri.parse(url.toString());
-                intent.setDataAndType(uri,type);
+                intent.setDataAndType(Uri.parse(createUrlStr(file)),ConstStrings.VideoIntentType);
                 startActivity(intent);
+            }else if(FileUtil.isImage(file.name)){//如果是图片
+                List<String> imgUrls = fileList
+                        .stream()
+                        .filter(fileMsg -> FileUtil.isImage(fileMsg.name))//当前文件夹内文件筛选出所有图片文件
+                        .map(name->Uri.parse(createUrlStr(name)).toString())//stream返回格式为 string list 即该图片的uri
+                        .collect(Collectors.toList());//返回
+                new ShowImagesDialog(FileListActivity.this
+                        ,imgUrls
+                        ,Uri.parse(createUrlStr(file)).toString()).show();//打开图片浏览窗口 默认显示图片为点击的那张图
             }
         });
         hlv.setOnItemLongClickListener((adapterView, view, pos, n) -> {
@@ -128,6 +125,28 @@ public class FileListActivity extends BaseActivity{
         });
     }
 
+    /**
+     * 根据拼接出url字符串 （视频,图片资源）
+     * @param file
+     * @return
+     */
+    protected String createUrlStr(FileMsg file){
+        String path = file.path;
+        try {
+            path = URLEncoder.encode(path,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        StringBuilder url = new StringBuilder();
+        url.append(getSession(currentHost)
+                .getUrlBase())
+                .append(ConstStrings.FileIOURL)
+                .append(ConstStrings.Question)
+                .append(Key.FilePathKey)
+                .append(ConstStrings.Equal)
+                .append(path);
+        return url.toString();
+    }
     /**
      * 文件信息拼装
      * 返回的字符串每个属性段都会换行显示

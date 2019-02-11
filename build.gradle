@@ -3,17 +3,23 @@
 buildscript {
 
     repositories {
-        maven {
-            url 'http://maven.aliyun.com/nexus/content/groups/public/'
-        }
-        maven{
-            url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'
-        }
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url 'http://maven.oschina.net/content/groups/public/' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url "http://maven.springframework.org/release" }
+        maven { url "http://maven.restlet.org" }
+        maven { url "http://mirrors.ibiblio.org/maven2" }
+        maven { url "http://repo.baichuan-android.taobao.com/content/groups/BaichuanRepositories/"}
+        maven { url 'https://maven.fabric.io/public' }
+        jcenter()
         google()
+        
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.2'
-        
+
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -23,12 +29,17 @@ buildscript {
 
 allprojects {
     repositories {
-        maven {
-            url 'http://maven.aliyun.com/nexus/content/groups/public/'
-        }
-        maven{
-            url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'
-        }
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url 'http://maven.oschina.net/content/groups/public/' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url "http://maven.springframework.org/release" }
+        maven { url "http://maven.restlet.org" }
+        maven { url "http://mirrors.ibiblio.org/maven2" }
+        maven { url "http://repo.baichuan-android.taobao.com/content/groups/BaichuanRepositories/"}
+        maven { url 'https://maven.fabric.io/public' }
+        jcenter()
         google()
     }
 }

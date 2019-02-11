@@ -70,17 +70,7 @@ public class FileUtil {
 		return size;
 	}
 
-	private static String [] videoFiles = {
-			".avi",".mp4",".flv",".wmv",".mov",".rmvb",".rm",".mkv",".amv"
-	};
 
-	public static boolean isVideo(String fileName){
-		for (String video:videoFiles){
-			if (fileName.toLowerCase().contains(video))
-				return true;
-		}
-		return false;
-	}
 
 	/**
 	 * 根据Base.File对象创建
@@ -109,4 +99,28 @@ public class FileUtil {
 		}
 		return fl;
 	}
+
+	private static String [] videoFiles = {
+			".avi",".mp4",".flv",".wmv",".mov",".rmvb",".rm",".mkv",".amv"
+	};
+
+	public static boolean isVideo(String fileName){
+		for (String video:videoFiles){
+			if (fileName.toLowerCase().contains(video))
+				return true;
+		}
+		return false;
+	}
+
+	private static String [] imageFiles = {
+			".jpg",".png",".gif",".bmp"
+	};
+
+    public static boolean isImage(String fileName) {
+		for (String image:imageFiles){
+			if (fileName.toLowerCase().contains(image))
+				return true;
+		}
+		return false;
+    }
 }
