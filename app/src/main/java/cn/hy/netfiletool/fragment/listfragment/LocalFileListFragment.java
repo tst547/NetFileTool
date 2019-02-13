@@ -123,9 +123,9 @@ public class LocalFileListFragment extends BaseListFragment {
             ImageView image = view.findViewById(R.id.icon);
             text.setText(mobileFile.fileName);
             if (mobileFile.file.isDirectory())
-                image.setImageResource(R.drawable.mobile_folder);
+                image.setImageResource(R.drawable.img_folder);
             else
-                image.setImageResource(R.drawable.mobile_file);
+                image.setImageResource(R.drawable.img_file);
             return view;
         }
     }

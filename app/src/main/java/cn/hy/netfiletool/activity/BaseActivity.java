@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import cn.hy.netfiletool.application.AppBox;
 import cn.hy.netfiletool.bean.HostInfo;
 import cn.hy.netfiletool.net.Session;
@@ -18,6 +19,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Intent intent;//获取Activity传递过来的数据
 
     protected AppBox appBox;
+
+
+
+
     /**
      * 获取当前会话
      * @return

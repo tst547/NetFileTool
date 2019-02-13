@@ -12,6 +12,7 @@ public class ConstStrings {
     public static final String FileUnitsByte = "byte";
     public static final String Offset = "-";
     public static final String Back = "..";//顿号
+    public static final String FullStop = ".";//顿号
     public static final String Question = "?";
     public static final String UrlAnd = "&";
     public static final String Equal = "=";
@@ -45,10 +46,7 @@ public class ConstStrings {
     public static final String DownLoadStreamFailed = "任务失败，读写操作错误";
     public static final String FailedFileList = "文件列表加载错误";
 
-
-    public static final String VideoIntentType = "video/*";//视频播放intent类型
-    public static final String ImageIntentType = "image/*";//浏览图片intent类型
-
     public static final String Delete = "删除";
     public static final String HostDetail = "详情";
+    public static final String NoActivityFound = "没有应用可以响应该文件类型";
 }

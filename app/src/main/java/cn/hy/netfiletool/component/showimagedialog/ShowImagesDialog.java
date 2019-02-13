@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
@@ -24,11 +25,12 @@ import java.util.List;
 
 import cn.hy.netfiletool.R;
 import cn.hy.netfiletool.component.showimagedialog.adapter.ShowImagesAdapter;
+
 import com.github.chrisbanes.photoview.PhotoView;
 
 public class ShowImagesDialog extends Dialog {
 
-    private View mView ;
+    private View mView;
     private Context mContext;
     private ShowImagesViewPager mViewPager;
     private TextView mIndexText;
@@ -74,21 +76,27 @@ public class ShowImagesDialog extends Dialog {
 
 
     private void initData() {
-        for (String imgUrl:mImgUrls) {
+        for (String imgUrl : mImgUrls) {
             final PhotoView photoView = new PhotoView(mContext);
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             photoView.setLayoutParams(layoutParams);
             photoView.setOnPhotoTapListener((view, x, y) -> dismiss());
-            Glide.with(mContext)
-                    .load(imgUrl)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(new SimpleTarget<GlideDrawable>() {
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            photoView.setImageDrawable(resource);
-                        }
-                    });
+            if (imgUrl.endsWith(".gif"))
+                Glide.with(mContext)
+                        .load(imgUrl)
+                        .error(R.drawable.loading_error)
+                        .into(new GlideDrawableImageViewTarget(photoView,7));
+            else
+                Glide.with(mContext)
+                        .load(imgUrl)
+                        .placeholder(R.drawable.loading_image)
+                        .error(R.drawable.loading_error)
+                        .into(new SimpleTarget<GlideDrawable>() {
+                            @Override
+                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                photoView.setImageDrawable(resource);
+                            }
+                        });
 
             mViews.add(photoView);
             mTitles.add(mImgUrls.indexOf(imgUrl) + "");

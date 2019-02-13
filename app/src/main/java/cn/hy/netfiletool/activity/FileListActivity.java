@@ -2,7 +2,6 @@ package cn.hy.netfiletool.activity;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 import cn.hy.netfiletool.R;
@@ -38,6 +38,7 @@ public class FileListActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_layout);
+        initActionBar();
         // 获取上一个Activity传过来的文件列表(String类型的JSON)
         List<FileMsg> fileList = (List<FileMsg>) getIntent().getExtras().get(Key.FileListKey);
         currentHost = (HostInfo) getIntent().getExtras().get(Key.HostInfoKey);
@@ -45,8 +46,13 @@ public class FileListActivity extends BaseActivity{
         fileList.stream().sorted();
         initList(fileList);
         externalRootFile = Environment.getExternalStorageDirectory();
+
     }
 
+    public void initActionBar() {
+        Toolbar toolbar = this.findViewById(R.id.activity_main_toolbar);
+        setSupportActionBar(toolbar);
+    }
 
     /**
      * 初始化列表
@@ -77,12 +83,6 @@ public class FileListActivity extends BaseActivity{
                         toastMsg(ConstStrings.FailedFileList);
                     }
                 }));
-            }
-            if(FileUtil.isVideo(file.name)){//如果是视频文件 则隐式调用播放器
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(createUrlStr(file)),ConstStrings.VideoIntentType);
-                startActivity(intent);
             }else if(FileUtil.isImage(file.name)){//如果是图片
                 List<String> imgUrls = fileList
                         .stream()
@@ -92,6 +92,17 @@ public class FileListActivity extends BaseActivity{
                 new ShowImagesDialog(FileListActivity.this
                         ,imgUrls
                         ,Uri.parse(createUrlStr(file)).toString()).show();//打开图片浏览窗口 默认显示图片为点击的那张图
+            }else{
+                Intent intent = new Intent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(createUrlStr(file)),FileUtil.getFileMIME(file.name));
+                try{
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    toastMsg(ConstStrings.NoActivityFound);
+                }
             }
         });
         hlv.setOnItemLongClickListener((adapterView, view, pos, n) -> {
@@ -208,9 +219,9 @@ public class FileListActivity extends BaseActivity{
             ImageView image = view.findViewById(R.id.icon);
             text.setText(file.name);
             if (file.isDir)
-                image.setImageResource(R.drawable.icons_folder);
+                image.setImageResource(R.drawable.img_folder);
             else
-                image.setImageResource(R.drawable.icons_file);
+                image.setImageResource(R.drawable.img_file);
             return view;
         }
     }
