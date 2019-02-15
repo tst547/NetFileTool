@@ -21,6 +21,7 @@ public class ConstStrings {
     public static final String HTTP_URL_PERFIX = "http://";
 
     public static final String FileIOURL = "/fileIO";
+    public static final String FileDLURL = "/fileDL";
     public static final String PathListURL = "/list";
 
     public static final String DivideFormat = "0.00";//除法结果标准

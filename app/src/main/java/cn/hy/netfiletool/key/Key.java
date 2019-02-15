@@ -11,6 +11,7 @@ public class Key {
     public static final String FileListKey = "fileList";
     public static final String FilePathKey = "filePath";
     public static final String Range = "Range";
+    public static final String RangeValuePrefix = "bytes=";
     public static final String DataBase = "net_file_db";
 
 
@@ -24,5 +25,6 @@ public class Key {
     public static final int ScannerRecvPort = 22455; //扫描消息接收端口
 
 
-
+    public static final String Connect = "Connection";
+    public static final String Close = "close";
 }

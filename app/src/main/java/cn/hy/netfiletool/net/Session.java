@@ -69,13 +69,14 @@ public class Session {
                     .add(Key.FilePathKey, downLoadMsg.getBaseFile().path)
                     .build();
             Request request = new Request.Builder()
-                    .url(urlBase + ConstStrings.FileIOURL)
+                    .url(urlBase + ConstStrings.FileDLURL)
+                    .addHeader(Key.Connect, Key.Close)
                     .addHeader(Key.Range
-                            ,String.valueOf(downLoadMsg
+                            ,Key.RangeValuePrefix + String.valueOf(downLoadMsg
                                     .getProgress()
                                     .getOffset() > 0 ? downLoadMsg
                                     .getProgress()
-                                    .getOffset()+ConstStrings.Offset : 0))
+                                    .getOffset()+ConstStrings.Offset : 0 + ConstStrings.Offset))
                     .post(body)
                     .build();
             Call call = okHttpClient.newCall(request);
@@ -103,6 +104,7 @@ public class Session {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(urlBase + path)
+                .addHeader(Key.Connect, Key.Close)
                 .build();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new OKHttpCallback(able));

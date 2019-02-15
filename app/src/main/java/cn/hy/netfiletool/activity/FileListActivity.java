@@ -123,9 +123,10 @@ public class FileListActivity extends BaseActivity{
                             downLoadMsg.setProgress(progress);
                             try {
                                 downLoadMsg.setFile(FileUtil.createFileByBaseFile(file.name
-                                        ,externalRootFile.getPath() + Key.DownLoadPath));
+                                        ,externalRootFile.getPath() + ConstStrings.Sprit + Key.DownLoadPath));
                                 IOStream.down(getSession(currentHost),downLoadMsg);
                             } catch (IOException e) {
+                                e.printStackTrace();
                                 downLoadMsg.setRunFlag(false);
                             }
                             appBox.getDownloadMsgs().add(downLoadMsg);
